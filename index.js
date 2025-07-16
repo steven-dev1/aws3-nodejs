@@ -1,12 +1,11 @@
 import express from "express"
 import fileUpload from "express-fileupload"
-import "./config.js"
+import { uploadFile } from "./s3.js"
 
 
 const app = express()
 const PORT = 3000
 
-app.use(express.json())
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: "./uploads"
@@ -16,9 +15,9 @@ app.get("/", (req, res) => {
     res.send("Hello World!")
 })
 
-app.post("/files", (req, res) => {
-    console.log(req.files)
-    res.send("File uploaded successfully!")
+app.post("/files", async (req, res) => {
+    const result = await uploadFile(req.files.file)
+    res.send({ success: true, message: "File uploaded successfully", result })
 })
 
 app.listen(PORT, () => {
