@@ -1,6 +1,6 @@
 import express from "express"
 import fileUpload from "express-fileupload"
-import { getFile, getFiles, uploadFile } from "./s3.js"
+import { downloadFile, getFile, getFiles, uploadFile } from "./s3.js"
 
 
 const app = express()
@@ -11,9 +11,14 @@ app.use(fileUpload({
     tempFileDir: "./uploads"
 }))
 
-app.get("/files", async (req, res) => {
+app.get("/files", async (_req, res) => {
     const result = await getFiles()
     res.json(result.Contents)
+})
+
+app.get("/download/:fileName", async (req, res) => {
+    await downloadFile(req.params.fileName)
+    res.json({ success: true, message: "File downloaded successfully" })
 })
 
 app.get("/files/:fileName", async (req, res) => {

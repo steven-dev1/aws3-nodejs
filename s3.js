@@ -38,3 +38,13 @@ export async function getFile(fileName) {
     const data = await client.send(command)
     return data
 }
+
+export async function downloadFile(fileName) {
+    const command = new GetObjectCommand({
+        Bucket: AWS_BUCKET_NAME,
+        Key: fileName
+    })
+    const result = await client.send(command)
+    console.log(result)
+    result.Body.pipe(fs.createWriteStream("./uploads/" + fileName))
+}
