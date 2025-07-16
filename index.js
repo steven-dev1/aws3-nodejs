@@ -1,6 +1,6 @@
 import express from "express"
 import fileUpload from "express-fileupload"
-import { downloadFile, getFile, getFiles, uploadFile } from "./s3.js"
+import { downloadFile, getFile, getFiles, getSignedUrlForFile, uploadFile } from "./s3.js"
 
 
 const app = express()
@@ -22,9 +22,9 @@ app.get("/download/:fileName", async (req, res) => {
 })
 
 app.get("/files/:fileName", async (req, res) => {
-    console.log(req.params.fileName)
-    const result = await getFile(req.params.fileName)
-    res.json(result.$metadata)
+    const result = await getSignedUrlForFile(req.params.fileName)
+    console.log(result)
+    res.json(result)
 })
 
 app.post("/files", async (req, res) => {
