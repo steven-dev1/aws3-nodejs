@@ -1,5 +1,7 @@
 import express from "express"
 import fileUpload from "express-fileupload"
+import "./config.js"
+
 
 const app = express()
 const PORT = 3000
